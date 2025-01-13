@@ -109,19 +109,32 @@ impl TodoController {
     pub async fn delete(id: i32, db: DbConn) -> (Status, Value) {
         db.run(
             move |c: &mut SqliteConnection| match TodoUseCase::delete(c, id) {
-                Ok(_) => (
-                    Status::Ok,
-                    json!({
-                        "code": 200,
-                        "message": "Todo deleted successfully",
-                        "data": null,
-                    }),
-                ),
+                Ok(result) => {
+                    if result == 1 {
+                        (
+                            Status::Ok,
+                            json!({
+                                "code": 200,
+                                "message": "Todo deleted successfully",
+                                "data": null,
+                            }),
+                        )
+                    } else {
+                        (
+                            Status::NotFound,
+                            json!({
+                                "code": 404,
+                                "message": "Todo not found",
+                                "data": null,
+                            }),
+                        )
+                    }
+                }
                 Err(_) => (
-                    Status::NotFound,
+                    Status::InternalServerError,
                     json!({
-                        "code": 404,
-                        "message": "Todo not found",
+                        "code": 500,
+                        "message": "Internal server error",
                         "data": null,
                     }),
                 ),

@@ -3,6 +3,7 @@ use crate::{
     models::todo_model::{NewTodo, Todo},
 };
 use diesel::prelude::*;
+use diesel::result::Error;
 
 pub struct TodoRepository;
 
@@ -40,11 +41,12 @@ impl TodoRepository {
     }
 
     pub fn delete(c: &mut SqliteConnection, id: i32) -> QueryResult<usize> {
-        todos::table
-            .find(id)
-            .get_result::<Todo>(c)
-            .expect("DB error when deleting todo");
+        let todo = todos::table.find(id).first::<Todo>(c);
 
-        diesel::delete(todos::table.find(id)).execute(c)
+        match todo {
+            Ok(_) => diesel::delete(todos::table.find(id)).execute(c),
+            Err(Error::NotFound) => Ok(0),
+            Err(e) => Err(e),
+        }
     }
 }
