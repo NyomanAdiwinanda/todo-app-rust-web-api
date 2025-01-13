@@ -19,6 +19,7 @@ pub async fn run_server() -> Result<(), rocket::Error> {
             "/",
             routes![
                 root,
+                root_head,
                 find_all_todo,
                 find_one_todo,
                 create_todo,
