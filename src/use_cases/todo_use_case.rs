@@ -1,5 +1,5 @@
 use crate::{
-    models::todo_model::{NewTodo, Todo},
+    models::todo_model::{NewTodo, Todo, TodosResponse},
     repositories::todo_repository::TodoRepository,
 };
 use diesel::SqliteConnection;
@@ -7,7 +7,7 @@ use diesel::SqliteConnection;
 pub struct TodoUseCase;
 
 impl TodoUseCase {
-    pub fn find_all(c: &mut SqliteConnection, limit: i64) -> Result<Vec<Todo>, String> {
+    pub fn find_all(c: &mut SqliteConnection, limit: i64) -> Result<Vec<TodosResponse>, String> {
         TodoRepository::find_all(c, limit).map_err(|e| e.to_string())
     }
 

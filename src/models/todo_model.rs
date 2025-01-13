@@ -17,6 +17,14 @@ pub struct Todo {
     pub updated_at: String,
 }
 
+#[derive(Serialize, Queryable)]
+pub struct TodosResponse {
+    pub id: i32,
+    pub task: String,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
 #[derive(Deserialize, Insertable)]
 #[diesel(table_name = todos)]
 pub struct NewTodo {
