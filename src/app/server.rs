@@ -4,8 +4,11 @@ use crate::{
     error_handler::{
         bad_request::*, not_authorized::*, not_found::*, server_error::*, unprocessable_entity::*,
     },
-    routes::todo_route::{
-        create_todo::*, delete_todo::*, find_all_todo::*, find_one_todo::*, update_todo::*,
+    routes::{
+        root_route::root::*,
+        todo_route::{
+            create_todo::*, delete_todo::*, find_all_todo::*, find_one_todo::*, update_todo::*,
+        },
     },
 };
 use rocket::fairing::AdHoc;
@@ -15,6 +18,7 @@ pub async fn run_server() -> Result<(), rocket::Error> {
         .mount(
             "/",
             routes![
+                root,
                 find_all_todo,
                 find_one_todo,
                 create_todo,
